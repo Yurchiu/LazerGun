@@ -43,3 +43,4 @@
 ..\obj\main.o: ..\HARDWARE\DIST\dist.h
 ..\obj\main.o: ..\HARDWARE\TICK\tick.h
 ..\obj\main.o: ..\HARDWARE\TURN\turn.h
+..\obj\main.o: D:\Program Files\Keil\ARM\ARMCC\Bin\..\include\string.h

@@ -1,6 +1,6 @@
 Dependencies for Project 'OLED', Target 'OLED': (DO NOT MODIFY !)
 CompilerVersion: 5060750::V5.06 update 6 (build 750)::.\ARMCC
-F (.\main.c)(0x6787444B)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork -I ..\CORE -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\USER -I ..\HARDWARE\OLED -I ..\FWLIB\inc -I ..\HARDWARE\BEEP -I ..\HARDWARE\TOOL -I ..\HARDWARE\DIST -I ..\HARDWARE\TICK -I ..\HARDWARE\TURN -D__UVISION_VERSION="540" -DSTM32F407xx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER-o ..\obj\main.o --omf_browse ..\obj\main.crf --depend ..\obj\main.d)
+F (.\main.c)(0x67875497)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork -I ..\CORE -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\USER -I ..\HARDWARE\OLED -I ..\FWLIB\inc -I ..\HARDWARE\BEEP -I ..\HARDWARE\TOOL -I ..\HARDWARE\DIST -I ..\HARDWARE\TICK -I ..\HARDWARE\TURN -D__UVISION_VERSION="540" -DSTM32F407xx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER-o ..\obj\main.o --omf_browse ..\obj\main.crf --depend ..\obj\main.d)
 I (..\SYSTEM\sys\sys.h)(0x5E17DF67)
 I (..\USER\stm32f4xx.h)(0x542BA483)
 I (..\CORE\core_cm4.h)(0x53C7D530)
@@ -44,6 +44,7 @@ I (..\HARDWARE\TOOL\tool.h)(0x6786B17B)
 I (..\HARDWARE\DIST\dist.h)(0x67867561)
 I (..\HARDWARE\TICK\tick.h)(0x6785047B)
 I (..\HARDWARE\TURN\turn.h)(0x67862623)
+I (D:\Program Files\Keil\ARM\ARMCC\include\string.h)(0x5D9B3488)
 F (.\stm32f4xx_it.c)(0x5426CDF4)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork -I ..\CORE -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\USER -I ..\HARDWARE\OLED -I ..\FWLIB\inc -I ..\HARDWARE\BEEP -I ..\HARDWARE\TOOL -I ..\HARDWARE\DIST -I ..\HARDWARE\TICK -I ..\HARDWARE\TURN -D__UVISION_VERSION="540" -DSTM32F407xx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER-o ..\obj\stm32f4xx_it.o --omf_browse ..\obj\stm32f4xx_it.crf --depend ..\obj\stm32f4xx_it.d)
 I (stm32f4xx_it.h)(0x5426CDC1)
 I (stm32f4xx.h)(0x542BA483)
@@ -117,7 +118,7 @@ I (..\FWLIB\inc\stm32f4xx_can.h)(0x53DBAFAD)
 I (..\FWLIB\inc\stm32f4xx_dac.h)(0x53DBAFAD)
 I (..\FWLIB\inc\stm32f4xx_dcmi.h)(0x53DBAFAD)
 I (..\FWLIB\inc\stm32f4xx_fsmc.h)(0x53DBAFAD)
-F (..\HARDWARE\OLED\oled.c)(0x678712E3)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork -I ..\CORE -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\USER -I ..\HARDWARE\OLED -I ..\FWLIB\inc -I ..\HARDWARE\BEEP -I ..\HARDWARE\TOOL -I ..\HARDWARE\DIST -I ..\HARDWARE\TICK -I ..\HARDWARE\TURN -D__UVISION_VERSION="540" -DSTM32F407xx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER-o ..\obj\oled.o --omf_browse ..\obj\oled.crf --depend ..\obj\oled.d)
+F (..\HARDWARE\OLED\oled.c)(0x67874631)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork -I ..\CORE -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\USER -I ..\HARDWARE\OLED -I ..\FWLIB\inc -I ..\HARDWARE\BEEP -I ..\HARDWARE\TOOL -I ..\HARDWARE\DIST -I ..\HARDWARE\TICK -I ..\HARDWARE\TURN -D__UVISION_VERSION="540" -DSTM32F407xx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER-o ..\obj\oled.o --omf_browse ..\obj\oled.crf --depend ..\obj\oled.d)
 I (..\HARDWARE\OLED\oled.h)(0x6786B763)
 I (..\SYSTEM\sys\sys.h)(0x5E17DF67)
 I (..\USER\stm32f4xx.h)(0x542BA483)

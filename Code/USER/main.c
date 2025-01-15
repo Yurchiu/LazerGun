@@ -7,19 +7,24 @@
 #include "dist.h"
 #include "tick.h"
 #include "turn.h"
+#include <string.h>
 
 // The parameters needing to change.
 
-const int ignoreLen = 15; // The length of ignore.
+const int getRealLen = 21; // The length of a range.
 const int angleTurn = 2; // The angle that each time it turns.
 const int redetectNum = 4; // The total of detect each time it finishes a turn.
+const int getRealNum = 2; // the count of a function that been called.
+const int ignoreLen = 15; // The length of ignore.
 	
 // End of parameters.
 
+const int N = 180 * redetectNum / angleTurn + 10;
 
 Tar_PPos enemyPos[20];
-JPos rawEnemy[180*10+10];
-int ifDelete[180*10+10];
+JPos rawEnemy[N];
+int ifDelete[N];
+int bucket[N][10];
 int enemyNum = 0, rawEnemyNum = 0;
 
 void testOfKilling()
@@ -88,9 +93,25 @@ void addShowEnemy(JPos tmp)
 	OLED_Refresh();
 }
 
+int getTheMost(int l,int r)
+{
+	int b[10],maxR=9,maxNum=0;
+	for(int i=1;i<=9;i++) b[i]=0;
+	for(int i=l;i<=r;i++) b[rawEnemy[i].r]++;
+	for(int i=1;i<=9;i++)
+	{
+		if(b[i]>maxNum)
+		{
+			maxR=i;
+			maxNum=b[i];
+		}
+	}
+	return maxR;
+}
+
 int main()
 {
-	int nowEnemy = 9, nowL = 1, nowR = 1;
+	int lastEnemy, lastPos;
 	
 	delay_init(168);
  	OLED_Init();//E2 SCL | E4 SDA
@@ -155,92 +176,48 @@ int main()
 	
 	#ifdef __STEP_4
 	
-	// Step 4.1: Using `ignoreLen`, tag and delete it.
-	
-	for(int i = 1; i <= rawEnemyNum; i ++)
+	for(int getting = 1; getting <= getRealNum; getting ++)
 	{
-		nowL = i;
-		nowEnemy = rawEnemy[i].r;
-		
-		for(nowR = nowL;
-		(
-			rawEnemy[nowR].r == nowEnemy &&
-			nowR <= rawEnemyNum
-		);
-		nowR ++){} nowR --;
-		if(nowR - nowL + 1 <= ignoreLen)
+		memset(bucket, 0, sizeof(bucket));
+		for(int i = 1; i <= rawEnemyNum - getRealLen + 1; i ++)
 		{
-			for(int j = nowL; j <= nowR; j ++)
-				ifDelete[j] = 1;
+			int l = i, r = i + getRealLen - 1;
+			int tmp = getTheMost(l, r);
+			for(int j = l; j <= r; j ++) bucket[j][tmp]++;
 		}
-		i = nowR + 1;
+		for(int i = 1; i <= rawEnemyNum; i ++)
+		{
+			int maxR = 9, maxNum = 0;
+			for(int j = 1; j <= 9; j ++)
+			{
+				if(bucket[i][j] > maxNum)
+				{
+					maxR = j;
+					maxNum = bucket[i][j];
+				}
+			}
+			rawEnemy[i].r = maxR;
+		}
 	}
 	
-	// Step 4.2: Merge the deleted.
+	lastEnemy = rawEnemy[1].r;
+	lastPos = 1;
 	
-	for(int i = 1; i <= rawEnemyNum; i ++)
+	rawEnemy[rawEnemyNum + 1].r = 0;
+	
+	for(int i = 2; i <= rawEnemyNum + 1; i ++)
 	{
-		int theMost = 0, theMostR = 9;
-			
-		while(ifDelete[i] == 0 && i <= rawEnemyNum) i++;
-		if(i > rawEnemyNum) break;
-		
-		nowL = nowR = i;
-		while(ifDelete[nowR] == 1 && nowR <= rawEnemyNum) nowR ++; nowR --;
-		
-		for(int j = nowL; j <= nowR; j ++)
+		if(rawEnemy[i].r == lastEnemy) continue;
+		int L = lastPos, R = i - 1;
+		if(R - L + 1 > ignoreLen && lastEnemy != 9)
 		{
-			if(theMostR == rawEnemy[j].r) theMost ++;
-			else theMost --;
-			
-			if(theMost <= 0)
-			{
-				theMostR = rawEnemy[j].r;
-				theMost = 1;
-			}
+			JPos tmp;
+			tmp.r = lastEnemy;
+			tmp.w = (rawEnemy[L].w + rawEnemy[R].w) / 2;
+			addShowEnemy(tmp);
 		}
-		
-		if(theMost <= 1)
-		{
-			if(nowL > 1)
-			{
-				theMostR = rawEnemy[nowL - 1].r;
-			}
-			if(nowR < rawEnemyNum)
-			{
-				theMostR = rawEnemy[nowR + 1].r;
-			}
-		}
-		
-		for(int j = nowL; j <= nowR; j ++)
-		{
-			rawEnemy[j].r = theMostR;
-		}
-		
-		i = nowR + 1;
-	}
-	
-	// Step 4.3: Get the real enemy.
-	
-	for(int i = 1; i <= rawEnemyNum; i ++)
-	{
-		JPos tmp;
-		
-		nowL = i;
-		nowEnemy = rawEnemy[i].r;
-		for(nowR = nowL;
-		(
-			rawEnemy[nowR].r == nowEnemy &&
-			nowR <= rawEnemyNum
-		);
-		nowR ++){} nowR --;
-		
-		tmp.r = nowEnemy;
-		tmp.w = (rawEnemy[nowL].w + rawEnemy[nowR].w) / 2;
-		
-		if(tmp.r != 9) addShowEnemy(tmp);
-		
-		i = nowR + 1;
+		lastEnemy = rawEnemy[i].r;
+		lastPos = i;
 	}
 	
 	OLED_ShowNum(118,0,enemyNum,numLen(enemyNum),16,1);
