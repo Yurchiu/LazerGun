@@ -9,7 +9,7 @@ double toDuu(double w){return w * 180.0 / PI;}
 PPos toPPos(JPos p)
 {
 	PPos ret;
-	p.r = p.r * 5 + 20;
+	p.r = p.r * 5 + 17;
 	ret.x = - (p.r * cos(toRad(p.w)) - 64);
 	ret.y = 62 - (p.r * sin(toRad(p.w)));
 	if(ret.y > 62) ret.y = 62;

@@ -11,22 +11,22 @@
 
 // The parameters needing to change.
 
-const int getRealLen = 61; // The length of a range.
-const int getRealNum = 3; // the count of a function that been called.
-const int ignoreLen = 41; // The length of ignore.
+const int getRealLen = 50; // The length of a range.
+const int getRealNum = 4; // the count of a function that been called.
+const int ignoreLen = 50; // The length of ignore.
 
 const double angleTurn = 0.25; // The angle that each time it turns.
 
-const int stdLen = 100; // The stdard len of enemies.
+const int stdLen = 50; // The stdard len of enemies.
 const int ignoreStd = 50; // Ignore this optmistic.
 
-const double derrorW = -4/*-3.0*/; // The detect error.
-const double derrorWK = 0.0/*0.1*/; // The k value of detect error.
-const double derrorO = 60.0; // The original point.
+const double derrorW = -8/*3*/; // The detect error.
+const double derrorWK = 0.08/*0.04*/; // The k value of detect error.
+const double derrorO = 0; // The original point.
 
-const double errorW = -7/*-12*/; // The error.
+const double errorW = 0/*-6*/; // The error.
 const double errorWK = 0; // The k value of error.
-const double errorO = 114.514; // The original point.
+const double errorO = 60; // The original point.
 	
 // End of parameters.
 
@@ -150,7 +150,7 @@ int main()
 	
 	#ifdef __STEP_2
 	
-	ATurn(180);
+	ATurn(200);
 	delay_ms(1000);
 	BTurn(-45);
 	delay_ms(1000);
@@ -161,7 +161,7 @@ int main()
 	
 	#ifdef __STEP_3
 	
-	for(double j = 180; j >= 0; j -= angleTurn)
+	for(double j = 200; j >= -20; j -= angleTurn)
 	{
 		double i = 180 - j, r = transDist(enemyFind());
 		ATurn(j);
@@ -169,6 +169,9 @@ int main()
 		rawEnemyNum ++;
 		rawEnemy[rawEnemyNum].r = r;
 		rawEnemy[rawEnemyNum].w = i + derrorW + derrorWK * (i - derrorO);
+		
+		//OLED_ShowNum(0,0,r,1,16,1);
+		//OLED_Refresh();
 	}
 	
 	#endif
@@ -230,12 +233,12 @@ int main()
 		
 		if(R == 9) continue;
 		
-		if(i > 1 && i < renemyNum && enemyRange[i - 1].r < R && enemyRange[i + 1].r < R)
+		if(i > 1 && i < renemyNum && enemyRange[i - 1].r < 9 && enemyRange[i + 1].r < 9)
 			tmp.w = (AW + BW) / 2;
-		else if(i > 1 && enemyRange[i - 1].r < R && length <= ignoreStd)
-			tmp.w = BW - stdLen / 2;
-		else if(i < renemyNum && enemyRange[i + 1].r < R && length <= ignoreStd)
-			tmp.w = AW + stdLen / 2;
+		else if(i > 1 && enemyRange[i - 1].r < 9 && length <= ignoreStd)
+			tmp.w = BW - stdLen / 4 + (AW + BW) / 4;
+		else if(i < renemyNum && enemyRange[i + 1].r < 9 && length <= ignoreStd)
+			tmp.w = AW + stdLen / 4 + (AW + BW) / 4;
 		else
 			tmp.w = (AW + BW) / 2;
 		tmp.r = R;
