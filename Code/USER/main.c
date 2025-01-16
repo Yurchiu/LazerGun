@@ -25,8 +25,8 @@ const double derrorWK = 0.08/*0.04*/; // The k value of detect error.
 const double derrorO = 0; // The original point.
 
 const double errorW = 0/*-6*/; // The error.
-const double errorWK = 0; // The k value of error.
-const double errorO = 60; // The original point.
+const double errorWK = 0.04; // The k value of error.
+const double errorO = 180; // The original point.
 	
 // End of parameters.
 
@@ -168,7 +168,8 @@ int main()
 			
 		rawEnemyNum ++;
 		rawEnemy[rawEnemyNum].r = r;
-		rawEnemy[rawEnemyNum].w = i + derrorW + derrorWK * (i - derrorO);
+		rawEnemy[rawEnemyNum].w = i + derrorW + derrorWK * (i - derrorO) 
+		                          + errorW + errorWK * (i - errorO);
 		
 		//OLED_ShowNum(0,0,r,1,16,1);
 		//OLED_Refresh();
@@ -275,7 +276,7 @@ int main()
 		OLED_ShowChar(118,15,'y',16,1);
 		OLED_Refresh();
 		
-		BTurn(getWay(tmp) + errorW + errorWK * (getWay(tmp) - errorO));
+		BTurn(getWay(tmp)/* + errorW + errorWK * (getWay(tmp) - errorO)*/);
 		delay_ms(1500);
 		
 		BEEP_Open();	
