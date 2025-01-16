@@ -11,53 +11,32 @@
 
 // The parameters needing to change.
 
-const int getRealLen = 21; // The length of a range.
-const int angleTurn = 2; // The angle that each time it turns.
-const int redetectNum = 4; // The total of detect each time it finishes a turn.
-const int getRealNum = 2; // the count of a function that been called.
-const int ignoreLen = 15; // The length of ignore.
+const int getRealLen = 5; // The length of a range.
+const int getRealNum = 3; // the count of a function that been called.
+const int ignoreLen = 3; // The length of ignore.
+
+const double angleTurn = 0.25; // The angle that each time it turns.
+const int detectNum = 1; // The total of detect each time it finishes a turn.
+
+const double derrorW = 6.0; // The detect error.
+const double derrorWK = -0.09; // The k value of detect error.
+const double derrorO = 90.0; // The original point.
+
+const double errorW = -0.5; // The error.
+const double errorWK = 0.145; // The k value of error.
+const double errorO = 85.0; // The original point.
+
+//const int enemyLen[] = {0, 22, 21, 20, 19, 20, 17, 16, 15, 0}; // The length of enemies len.
 	
 // End of parameters.
 
-const int N = 180 * redetectNum / angleTurn + 10;
+const int N = (int)(180 * detectNum / angleTurn + 100);
 
 Tar_PPos enemyPos[20];
 JPos rawEnemy[N];
 int ifDelete[N];
 int bucket[N][10];
 int enemyNum = 0, rawEnemyNum = 0;
-
-void testOfKilling()
-{
-	enemyPos[1].x=34;
-	enemyPos[1].y=23;
-	enemyPos[2].x=45;
-	enemyPos[2].y=13;
-	enemyPos[3].x=54;
-	enemyPos[3].y=12;
-	enemyPos[4].x=25;
-	enemyPos[4].y=42;
-	enemyPos[5].x=12;
-	enemyPos[5].y=84;
-	enemyPos[6].x=94;
-	enemyPos[6].y=35;
-	enemyPos[7].x=110;
-	enemyPos[7].y=4;
-	enemyPos[8].x=74;
-	enemyPos[8].y=41;
-	enemyNum=8;
-	
-	for(int i=1;i<=8;i++)
-	{
-		enemyPos[i].dis = getDist
-		(
-			enemyPos[i].x, enemyPos[i].y,
-			83, 63
-		);
-		OLED_ShowTarget(enemyPos[i].x,enemyPos[i].y);
-		OLED_Refresh();
-	}
-}
 
 void enemySort()
 {
@@ -78,16 +57,13 @@ void enemySort()
 void addShowEnemy(JPos tmp)
 {
 	if(tmp.r == 9) return;
-	
 	enemyNum ++;
-	
 	enemyPos[enemyNum].x = toPPos(tmp).x;
 	enemyPos[enemyNum].y = toPPos(tmp).y;
-
 	enemyPos[enemyNum].dis = getDist
 	(
 		enemyPos[enemyNum].x, enemyPos[enemyNum].y,
-		83, 63
+		84, 63
 	);
 	OLED_ShowTarget(enemyPos[enemyNum].x,enemyPos[enemyNum].y);
 	OLED_Refresh();
@@ -109,6 +85,18 @@ int getTheMost(int l,int r)
 	return maxR;
 }
 
+void testDetectDist()
+{
+	while(1)
+	{
+		int r = enemyFind();
+		r = transDist(r);
+			
+		OLED_ShowNum(0,0,r,1,16,1);
+		OLED_Refresh();
+	}
+}
+
 int main()
 {
 	int lastEnemy, lastPos;
@@ -120,15 +108,12 @@ int main()
 	tim2_Init(10-1,84-1);
 	tim3_Init(20000-1,84-1);//A6 A(CH1) | A7 B(CH2)
 	
-	// If you want to debug the function of B Turning, please enable STEP 1,5,6 and DEBUG 1, disable STEP 2-4.
-	
 	#define __STEP_1
 	#define __STEP_2
 	#define __STEP_3
 	#define __STEP_4
 	#define __STEP_5
 	#define __STEP_6
-	//#define __DEBUG_1
 	
 	// Step 1: Show the ground.
 	
@@ -144,7 +129,7 @@ int main()
 	#ifdef __STEP_2
 	
 	ATurn(180);
-	delay_ms(1500);
+	delay_ms(1000);
 	
 	#endif
 	
@@ -152,21 +137,18 @@ int main()
 	
 	#ifdef __STEP_3
 	
-	for(int j=180;j>=0;j-=angleTurn)
+	for(double j = 180; j >= 0; j -= angleTurn)
 	{
-		int i = 180 - j;
+		double i = 180 - j;
 		ATurn(j);
-		for(int k=1;k<=redetectNum;k++)
+		for(int k=1;k<=detectNum;k++)
 		{
 			int r = enemyFind();
 			r = transDist(r);
 			
 			rawEnemyNum ++;
 			rawEnemy[rawEnemyNum].r = r;
-			rawEnemy[rawEnemyNum].w = i;
-			
-			OLED_ShowNum(0,0,r,numLen(r),16,1);
-			OLED_Refresh();
+			rawEnemy[rawEnemyNum].w = i + derrorW + derrorWK * (i - derrorO);
 		}
 	}
 	
@@ -212,24 +194,19 @@ int main()
 		if(R - L + 1 > ignoreLen && lastEnemy != 9)
 		{
 			JPos tmp;
+			double WL = rawEnemy[L].w, WR = rawEnemy[R].w;
+			//WL += reduceLR; WR -= reduceLR;
 			tmp.r = lastEnemy;
-			tmp.w = (rawEnemy[L].w + rawEnemy[R].w) / 2;
+			tmp.w = (WL + WR) / 2;
+			//tmp.w += (WL * 2 + enemyLen[lastEnemy]) / 4;
 			addShowEnemy(tmp);
 		}
 		lastEnemy = rawEnemy[i].r;
 		lastPos = i;
 	}
 	
-	OLED_ShowNum(118,0,enemyNum,numLen(enemyNum),16,1);
+	OLED_ShowNum(61,43,enemyNum,numLen(enemyNum),16,1);
 	OLED_Refresh();
-	
-	#endif
-	
-	// Debug 1: Kill the enemies.
-	
-	#ifdef __DEBUG_1
-	
-	testOfKilling();
 	
 	#endif
 	
@@ -251,17 +228,20 @@ int main()
 		tmp.x = enemyPos[i].x;
 		tmp.y = enemyPos[i].y;
 		
-		OLED_ShowNum(0,0,tmp.x,3,16,1);
-		OLED_ShowNum(0,18,tmp.y,3,16,1);
+		OLED_ShowNum(0,0,(int)tmp.x,3,16,1);
+		OLED_ShowNum(100,0,(int)tmp.y,3,16,1);
+		OLED_ShowChar(0,15,'x',16,1);
+		OLED_ShowChar(118,15,'y',16,1);
+		OLED_Refresh();
 		
-		BTurn(getWay(tmp));
+		BTurn(getWay(tmp) + errorW + errorWK * (getWay(tmp) - errorO));
 		delay_ms(1500);
 		
-		BEEP_Open();
+		BEEP_Open();	
 		delay_ms(3100);
 		BEEP_Close();
 		
-		OLED_RemoveTarget(enemyPos[i].x,enemyPos[i].y);
+		OLED_RemoveTarget((int)tmp.x,(int)tmp.y);
 		OLED_Refresh();
 	}
 	

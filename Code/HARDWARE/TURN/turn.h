@@ -5,7 +5,7 @@
 #include "stm32f4xx.h"
 
 void tim3_Init(u32 arr,u32 psc);
-void ATurn(int w);
-void BTurn(int w);
+void ATurn(double w);
+void BTurn(double w);
 
 #endif

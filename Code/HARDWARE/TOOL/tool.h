@@ -1,15 +1,15 @@
 #ifndef __TOOL_H
 #define __TOOL_H
 
-typedef struct{int x,y;}PPos;
-typedef struct{int w,r;}JPos;
-typedef struct{int x,y; double dis;}Tar_PPos;
+typedef struct{double x,y;}PPos;
+typedef struct{double w; int r;}JPos;
+typedef struct{double x,y,dis;}Tar_PPos;
 
 PPos toPPos(JPos p);
-double toRad(int w);
-int toDuu(double w);
-int numLen(int x);
-double getDist(int x1,int y1,int x2,int y2);
-int getWay(PPos p);
+double toRad(double w);
+double toDuu(double w);
+int numLen(double x);
+double getDist(double x1,double y1,double x2,double y2);
+double getWay(PPos p);
 
 #endif

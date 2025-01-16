@@ -580,7 +580,7 @@ void OLED_ShowSelf(u8 x,u8 y)
 void OLED_ShowGround()
 {
 	OLED_ShowPicture(0,0,128,64,GROUND,1);
-	OLED_ShowSelf(63,62);
-	OLED_ShowSelf(83,62);
+	OLED_ShowSelf(64,62);
+	OLED_ShowSelf(84,62);
 	OLED_Refresh();
 }

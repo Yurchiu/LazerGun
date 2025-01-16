@@ -5,7 +5,7 @@
 
 const int Soundv_dmps = 3406; // The speed of sound.
 const int distErr = 3; // The distance added to detector to correct the error.
-const int distErrLen = 1; // The length of error.
+const int distErrLen = 2; // The length of error.
 
 // End of parameters.
 
