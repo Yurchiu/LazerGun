@@ -18,13 +18,13 @@ const int ignoreLen = 41; // The length of ignore.
 const double angleTurn = 0.25; // The angle that each time it turns.
 const int detectNum = 1; // The total of detect each time it finishes a turn.
 
-const double derrorW = -3.0; // The detect error.
-const double derrorWK = 0.1; // The k value of detect error.
+const double derrorW = 0/*-3.0*/; // The detect error.
+const double derrorWK = 0/*0.1*/; // The k value of detect error.
 const double derrorO = 150.0; // The original point.
 
-const double errorW = -12; // The error.
-const double errorWK = -0.15; // The k value of error.
-const double errorO = 80.0; // The original point.
+const double errorW = 0/*-12*/; // The error.
+const double errorWK = 0/*-0.55*/; // The k value of error.
+const double errorO = 100.0; // The original point.
 	
 // End of parameters.
 
@@ -32,7 +32,7 @@ const int N = (int)(180 * detectNum / angleTurn + 100);
 
 Tar_PPos enemyPos[20];
 JPos rawEnemy[N];
-int ifDelete[N];
+RPos enemyRange[20];
 int bucket[N][10];
 int enemyNum = 0, rawEnemyNum = 0;
 
@@ -52,22 +52,21 @@ void enemySort()
 	}
 }
 
-void addEnemy(JPos tmp)
+void addEnemy(JPos tmp, int i)
 {
 	if(tmp.r == 9) return;
-	enemyNum ++;
-	enemyPos[enemyNum].x = toPPos(tmp).x;
-	enemyPos[enemyNum].y = toPPos(tmp).y;
-	enemyPos[enemyNum].dis = getDist
+	enemyPos[i].x = toPPos(tmp).x;
+	enemyPos[i].y = toPPos(tmp).y;
+	enemyPos[i].dis = getDist
 	(
-		enemyPos[enemyNum].x, enemyPos[enemyNum].y,
+		enemyPos[i].x, enemyPos[i].y,
 		84, 63
 	);
 }
 
 void showEnemy()
 {
-	for(int i = enemyNum; i >= enemyNum; i --)
+	for(int i = enemyNum; i >= 1; i --)
 	{
 		OLED_ShowTarget(enemyPos[i].x,enemyPos[i].y);
 		OLED_ShowNum(0,0,enemyPos[i].x,3,16,1);
@@ -208,19 +207,31 @@ int main()
 		int L = lastPos, R = i - 1;
 		if(R - L + 1 > ignoreLen && lastEnemy != 9)
 		{
-			JPos tmp;
-			double WL = rawEnemy[L].w, WR = rawEnemy[R].w;
-			tmp.r = lastEnemy;
-			tmp.w = (WL + WR) / 2;
-			if(L > 1 || R < rawEnemyNum)
-			{
-				if(rawEnemy[L - 1].r < lastEnemy ||
-				   rawEnemy[R + 1].r < lastEnemy) tmp.w /= 2;
-			}
-			addEnemy(tmp);
+			enemyNum ++;
+			enemyRange[enemyNum].r = lastEnemy;
+			enemyRange[enemyNum].aw = rawEnemy[L].w;
+			enemyRange[enemyNum].bw = rawEnemy[R].w;
 		}
 		lastEnemy = rawEnemy[i].r;
 		lastPos = i;
+	}
+	
+	for(int i = 1; i <= enemyNum; i ++)
+	{
+		JPos tmp;
+		int AW = enemyRange[i].aw, BW = enemyRange[i].bw;
+		int R = enemyRange[i].r;
+		
+		if(i > 1 && i < enemyNum && rawEnemy[i - 1].r < R && rawEnemy[i - 1].r < R)
+			tmp.w = (AW + BW) / 2;
+		else if(i > 1 && rawEnemy[i - 1].r < lastEnemy)
+			tmp.w = /*(WL * 4 + WR) / 5*/ AW;
+		else if(i < enemyNum && rawEnemy[i + 1].r < lastEnemy)
+			tmp.w = /*(WL + WR * 4) / 5*/ BW;
+		else
+			tmp.w = (AW + BW) / 2;
+		
+		addEnemy(tmp, i);
 	}
 	
 	OLED_ShowNum(61,43,enemyNum,numLen(enemyNum),16,1);
