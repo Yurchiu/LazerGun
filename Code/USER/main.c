@@ -11,9 +11,9 @@
 
 // The parameters needing to change.
 
-const int getRealLen = 5; // The length of a range.
-const int getRealNum = 3; // the count of a function that been called.
-const int ignoreLen = 3; // The length of ignore.
+const int getRealLen = 3; // The length of a range.
+const int getRealNum = 1; // the count of a function that been called.
+const int ignoreLen = 5; // The length of ignore.
 
 const double angleTurn = 0.25; // The angle that each time it turns.
 const int detectNum = 1; // The total of detect each time it finishes a turn.
@@ -22,8 +22,8 @@ const double derrorW = 6.0; // The detect error.
 const double derrorWK = -0.09; // The k value of detect error.
 const double derrorO = 90.0; // The original point.
 
-const double errorW = -0.5; // The error.
-const double errorWK = 0.145; // The k value of error.
+const double errorW = -8.5; // The error.
+const double errorWK = 0.10; // The k value of error.
 const double errorO = 85.0; // The original point.
 
 //const int enemyLen[] = {0, 22, 21, 20, 19, 20, 17, 16, 15, 0}; // The length of enemies len.
@@ -130,6 +130,8 @@ int main()
 	
 	ATurn(180);
 	delay_ms(1000);
+	BTurn(-45);
+	delay_ms(1000);
 	
 	#endif
 	
@@ -149,6 +151,9 @@ int main()
 			rawEnemyNum ++;
 			rawEnemy[rawEnemyNum].r = r;
 			rawEnemy[rawEnemyNum].w = i + derrorW + derrorWK * (i - derrorO);
+			
+			OLED_ShowNum(0,0,r,numLen(r),16,1);
+			OLED_Refresh();
 		}
 	}
 	
@@ -195,10 +200,8 @@ int main()
 		{
 			JPos tmp;
 			double WL = rawEnemy[L].w, WR = rawEnemy[R].w;
-			//WL += reduceLR; WR -= reduceLR;
 			tmp.r = lastEnemy;
 			tmp.w = (WL + WR) / 2;
-			//tmp.w += (WL * 2 + enemyLen[lastEnemy]) / 4;
 			addShowEnemy(tmp);
 		}
 		lastEnemy = rawEnemy[i].r;

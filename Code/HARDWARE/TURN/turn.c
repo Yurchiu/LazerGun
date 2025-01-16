@@ -48,6 +48,6 @@ void ATurn(double w)
 }
 void BTurn(double w)
 {
-	w=(int)(-w*13.0/180)+2200;
+	w=(int)(-w*1300/180)+2200;
 	TIM_SetCompare2(TIM3,w);
 }

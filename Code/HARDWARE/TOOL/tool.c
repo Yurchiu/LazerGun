@@ -16,9 +16,9 @@ PPos toPPos(JPos p)
 	return ret;
 }
 
-int numLen(double x)
+int numLen(double w)
 {
-	int ret = 0; x = (int)x;
+	int ret = 0, x = (int)w;
 	if(x == 0) return 1;
 	while(x){ret ++; x /= 10;}
 	return ret;
