@@ -1,0 +1,34 @@
+const int getRealLen = 51; // The length of a range.
+const int getRealNum = 3; // the count of a function that been called.
+const int ignoreLen = 21; // The length of ignore.
+
+const double angleTurn = 0.25; // The angle that each time it turns.
+const int detectNum = 1; // The total of detect each time it finishes a turn.
+
+const double derrorW = -5.0; // The detect error.
+const double derrorWK = 0.15; // The k value of detect error.
+const double derrorO = 160.0; // The original point.
+
+const double errorW = -10; // The error.
+const double errorWK = -0.2; // The k value of error.
+const double errorO = 85.0; // The original point.
+
+
+
+
+
+
+const int getRealLen = 51; // The length of a range.
+const int getRealNum = 3; // the count of a function that been called.
+const int ignoreLen = 41; // The length of ignore.
+
+const double angleTurn = 0.25; // The angle that each time it turns.
+const int detectNum = 1; // The total of detect each time it finishes a turn.
+
+const double derrorW = -3.0; // The detect error.
+const double derrorWK = 0.10; // The k value of detect error.
+const double derrorO = 150.0; // The original point.
+
+const double errorW = -12; // The error.
+const double errorWK = -0.15; // The k value of error.
+const double errorO = 80.0; // The original point.

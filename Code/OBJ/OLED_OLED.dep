@@ -1,6 +1,6 @@
 Dependencies for Project 'OLED', Target 'OLED': (DO NOT MODIFY !)
 CompilerVersion: 5060750::V5.06 update 6 (build 750)::.\ARMCC
-F (.\main.c)(0x6788C37F)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork -I ..\CORE -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\USER -I ..\HARDWARE\OLED -I ..\FWLIB\inc -I ..\HARDWARE\BEEP -I ..\HARDWARE\TOOL -I ..\HARDWARE\DIST -I ..\HARDWARE\TICK -I ..\HARDWARE\TURN -D__UVISION_VERSION="540" -DSTM32F407xx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER-o ..\obj\main.o --omf_browse ..\obj\main.crf --depend ..\obj\main.d)
+F (.\main.c)(0x67890071)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork -I ..\CORE -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\USER -I ..\HARDWARE\OLED -I ..\FWLIB\inc -I ..\HARDWARE\BEEP -I ..\HARDWARE\TOOL -I ..\HARDWARE\DIST -I ..\HARDWARE\TICK -I ..\HARDWARE\TURN -D__UVISION_VERSION="540" -DSTM32F407xx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER-o ..\obj\main.o --omf_browse ..\obj\main.crf --depend ..\obj\main.d)
 I (..\SYSTEM\sys\sys.h)(0x5E17DF67)
 I (..\USER\stm32f4xx.h)(0x542BA483)
 I (..\CORE\core_cm4.h)(0x53C7D530)

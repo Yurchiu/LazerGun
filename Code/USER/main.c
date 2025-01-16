@@ -11,22 +11,20 @@
 
 // The parameters needing to change.
 
-const int getRealLen = 3; // The length of a range.
-const int getRealNum = 1; // the count of a function that been called.
-const int ignoreLen = 5; // The length of ignore.
+const int getRealLen = 51; // The length of a range.
+const int getRealNum = 3; // the count of a function that been called.
+const int ignoreLen = 41; // The length of ignore.
 
 const double angleTurn = 0.25; // The angle that each time it turns.
 const int detectNum = 1; // The total of detect each time it finishes a turn.
 
-const double derrorW = 6.0; // The detect error.
-const double derrorWK = -0.09; // The k value of detect error.
-const double derrorO = 90.0; // The original point.
+const double derrorW = -3.0; // The detect error.
+const double derrorWK = 0.1; // The k value of detect error.
+const double derrorO = 150.0; // The original point.
 
-const double errorW = -8.5; // The error.
-const double errorWK = 0.10; // The k value of error.
-const double errorO = 85.0; // The original point.
-
-//const int enemyLen[] = {0, 22, 21, 20, 19, 20, 17, 16, 15, 0}; // The length of enemies len.
+const double errorW = -12; // The error.
+const double errorWK = -0.15; // The k value of error.
+const double errorO = 80.0; // The original point.
 	
 // End of parameters.
 
@@ -54,7 +52,7 @@ void enemySort()
 	}
 }
 
-void addShowEnemy(JPos tmp)
+void addEnemy(JPos tmp)
 {
 	if(tmp.r == 9) return;
 	enemyNum ++;
@@ -65,8 +63,20 @@ void addShowEnemy(JPos tmp)
 		enemyPos[enemyNum].x, enemyPos[enemyNum].y,
 		84, 63
 	);
-	OLED_ShowTarget(enemyPos[enemyNum].x,enemyPos[enemyNum].y);
-	OLED_Refresh();
+}
+
+void showEnemy()
+{
+	for(int i = enemyNum; i >= enemyNum; i --)
+	{
+		OLED_ShowTarget(enemyPos[i].x,enemyPos[i].y);
+		OLED_ShowNum(0,0,enemyPos[i].x,3,16,1);
+		OLED_ShowNum(100,0,enemyPos[i].y,3,16,1);
+		OLED_ShowChar(0,13,'x',16,1);
+		OLED_ShowChar(118,13,'y',16,1);
+		OLED_Refresh();
+		delay_ms(100);
+	}
 }
 
 int getTheMost(int l,int r)
@@ -202,7 +212,12 @@ int main()
 			double WL = rawEnemy[L].w, WR = rawEnemy[R].w;
 			tmp.r = lastEnemy;
 			tmp.w = (WL + WR) / 2;
-			addShowEnemy(tmp);
+			if(L > 1 || R < rawEnemyNum)
+			{
+				if(rawEnemy[L - 1].r < lastEnemy ||
+				   rawEnemy[R + 1].r < lastEnemy) tmp.w /= 2;
+			}
+			addEnemy(tmp);
 		}
 		lastEnemy = rawEnemy[i].r;
 		lastPos = i;
@@ -218,6 +233,7 @@ int main()
 	#ifdef __STEP_5
 	
 	enemySort();
+	showEnemy();
 	
 	#endif
 	
@@ -231,10 +247,10 @@ int main()
 		tmp.x = enemyPos[i].x;
 		tmp.y = enemyPos[i].y;
 		
-		OLED_ShowNum(0,0,(int)tmp.x,3,16,1);
-		OLED_ShowNum(100,0,(int)tmp.y,3,16,1);
-		OLED_ShowChar(0,15,'x',16,1);
-		OLED_ShowChar(118,15,'y',16,1);
+		OLED_ShowNum(0,0,tmp.x,3,16,1);
+		OLED_ShowNum(100,0,tmp.y,3,16,1);
+		OLED_ShowChar(0,13,'x',16,1);
+		OLED_ShowChar(118,13,'y',16,1);
 		OLED_Refresh();
 		
 		BTurn(getWay(tmp) + errorW + errorWK * (getWay(tmp) - errorO));
@@ -244,7 +260,7 @@ int main()
 		delay_ms(3100);
 		BEEP_Close();
 		
-		OLED_RemoveTarget((int)tmp.x,(int)tmp.y);
+		OLED_RemoveTarget(tmp.x,tmp.y);
 		OLED_Refresh();
 	}
 	

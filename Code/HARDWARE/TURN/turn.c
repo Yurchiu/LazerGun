@@ -43,7 +43,7 @@ void tim3_Init(u32 arr,u32 psc)
 
 void ATurn(double w)
 {
-	w=(int)(w*2000.0/270)+500;
+	w=(int)(w*2000/270)+500;
 	TIM_SetCompare1(TIM3,w);
 }
 void BTurn(double w)
