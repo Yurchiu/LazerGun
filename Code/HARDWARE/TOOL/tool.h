@@ -3,7 +3,7 @@
 
 typedef struct{double x,y;}PPos;
 typedef struct{double w; int r;}JPos;
-typedef struct{double x,y,dis;}Tar_PPos;
+typedef struct{double x,y,dis; int r;}Tar_PPos;
 typedef struct{double aw,bw; int r;}RPos;
 
 PPos toPPos(JPos p);

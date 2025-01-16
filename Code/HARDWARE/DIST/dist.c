@@ -50,9 +50,9 @@ int transDist(int d)
 
 int enemyFind()
 {
-	delay_ms(10);
+	delay_ms(6);
 	startGet();
-	delay_us(6);
+	delay_us(20);
 	endGet();
 	while(detectGet() == 0);
 	startTick();
